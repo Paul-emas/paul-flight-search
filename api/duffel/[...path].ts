@@ -2,7 +2,7 @@ declare const process: { env: Record<string, string | undefined> }
 
 export const config = { runtime: 'edge' }
 
-const DUFFEL_API = process.env.DUFFEL_API_URL
+const DUFFEL_API = 'https://api.duffel.com'
 
 const ALLOWED = ['air/offer_requests']
 
