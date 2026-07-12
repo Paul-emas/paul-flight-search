@@ -1,4 +1,8 @@
+declare const process: { env: Record<string, string | undefined> }
+
 export const config = { runtime: 'edge' }
+
+const DUFFEL_API = process.env.DUFFEL_API_URL
 
 const ALLOWED = ['air/offer_requests']
 
@@ -7,35 +11,18 @@ export default async function handler(req: Request): Promise<Response> {
   const path = url.pathname.replace(/^\/api\/duffel\//, '')
 
   if (!ALLOWED.some((p) => path.startsWith(p))) {
-    return new Response(JSON.stringify({ errors: [{ message: 'Route not allowed' }] }), {
-      status: 403,
-      headers: { 'Content-Type': 'application/json' },
-    })
+    return json({ errors: [{ message: 'Route not allowed' }] }, 403)
   }
 
-  if (!process.env.DUFFEL_TOKEN) {
-    return new Response(
-      JSON.stringify({ errors: [{ message: 'Server misconfigured: missing DUFFEL_TOKEN' }] }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } },
-    )
+  const token = process.env.DUFFEL_TOKEN
+  if (!token) {
+    return json({ errors: [{ message: 'Server misconfigured: missing DUFFEL_TOKEN' }] }, 500)
   }
 
-  const duffelApiUrl = process.env.DUFFEL_API_URL
-  const duffelToken = process.env.DUFFEL_TOKEN
-
-  if (!duffelApiUrl || !duffelToken) {
-    return new Response(
-      JSON.stringify({
-        errors: [{ message: 'Server misconfigured: missing DUFFEL_API_URL or DUFFEL_TOKEN' }],
-      }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } },
-    )
-  }
-
-  const upstream = await fetch(`${duffelApiUrl}/${path}${url.search}`, {
+  const upstream = await fetch(`${DUFFEL_API}/${path}${url.search}`, {
     method: req.method,
     headers: {
-      Authorization: `Bearer ${duffelToken}`,
+      Authorization: `Bearer ${token}`,
       'Duffel-Version': 'v2',
       'Content-Type': 'application/json',
       'Accept-Encoding': 'gzip',
@@ -45,6 +32,13 @@ export default async function handler(req: Request): Promise<Response> {
 
   return new Response(upstream.body, {
     status: upstream.status,
+    headers: { 'Content-Type': 'application/json' },
+  })
+}
+
+function json(data: unknown, status: number): Response {
+  return new Response(JSON.stringify(data), {
+    status,
     headers: { 'Content-Type': 'application/json' },
   })
 }
