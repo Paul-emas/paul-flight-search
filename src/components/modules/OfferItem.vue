@@ -207,7 +207,7 @@ const addOnLabel = computed(() => {
         </span>
       </div>
 
-      <div class="flex flex-1 items-center gap-3 md:gap-4">
+      <div class="flex flex-1 items-center gap-3 md:mx-auto md:max-w-sm md:gap-4">
         <div class="text-center">
           <p class="text-xl font-bold tabular-nums leading-none whitespace-nowrap text-slate-900 md:text-2xl">{{ departInfo.time }}</p>
           <p class="mt-0.5 text-xs text-slate-400">{{ departInfo.code }}</p>

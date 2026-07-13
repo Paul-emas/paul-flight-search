@@ -10,7 +10,7 @@
         <div class="h-9 w-9 shrink-0 animate-pulse rounded-full bg-slate-100 md:hidden" />
       </div>
 
-      <div class="flex flex-1 items-center gap-3 md:gap-4">
+      <div class="flex flex-1 items-center gap-3 md:mx-auto md:max-w-sm md:gap-4">
         <div class="space-y-2">
           <div class="h-6 w-14 animate-pulse rounded-md bg-slate-100" />
           <div class="h-3 w-8 animate-pulse rounded-full bg-slate-100" />
