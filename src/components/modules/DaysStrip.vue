@@ -73,7 +73,7 @@ watch(selectedDate, (next, prev) => {
         :key="day.date"
         type="button"
         @click="selectDay(day.date)"
-        class="flex h-14 flex-1 cursor-pointer flex-col items-center justify-center rounded-[10px] border-[1.5px] px-2 py-1.5 transition-all duration-200"
+        class="flex h-14 w-17 shrink-0 cursor-pointer flex-col items-center justify-center rounded-[10px] border-[1.5px] px-2 py-1.5 transition-all duration-200 md:w-auto md:flex-1"
         :class="
           selectedDate === day.date
             ? 'border-[#1a6b5a] bg-[#e6f5f1] shadow-[0_4px_12px_rgba(26,107,90,0.15)]'

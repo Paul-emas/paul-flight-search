@@ -17,7 +17,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://journey-mentors.vercel.app',
+        target: 'https://paul-flight-search.vercel.app',
         changeOrigin: true,
       },
     },

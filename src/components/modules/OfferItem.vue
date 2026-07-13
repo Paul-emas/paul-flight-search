@@ -174,87 +174,92 @@ const addOnLabel = computed(() => {
   >
     <button
       type="button"
-      class="grid w-full items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-slate-50/70"
-      style="grid-template-columns: 48px minmax(160px,1.4fr) max-content 1fr max-content minmax(150px,auto) 64px"
+      class="flex w-full flex-col gap-3 px-4 py-4 text-left transition-colors hover:bg-slate-50/70 md:flex-row md:items-center md:gap-4"
       @click="expanded = !expanded"
     >
+      <div class="flex items-center gap-3 md:w-52 md:shrink-0">
+        <div class="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-slate-100 md:h-12 md:w-12">
+          <img
+            v-if="ownerLogoUrl && !imgError"
+            :src="ownerLogoUrl"
+            :alt="offer.owner.name"
+            class="h-full w-full object-contain p-1.5"
+            @error="imgError = true"
+          />
+          <span v-else class="text-xs font-bold tracking-wider text-slate-500">{{ airlineInitials }}</span>
+        </div>
 
-      <div class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-slate-100">
-        <img
-          v-if="ownerLogoUrl && !imgError"
-          :src="ownerLogoUrl"
-          :alt="offer.owner.name"
-          class="h-full w-full object-contain p-1.5"
-          @error="imgError = true"
-        />
-        <span v-else class="text-xs font-bold tracking-wider text-slate-500">{{ airlineInitials }}</span>
+        <div class="min-w-0 flex-1">
+          <p class="truncate text-[15px] font-semibold leading-snug text-slate-900">{{ offer.owner.name }}</p>
+          <div class="mt-0.5 flex min-w-0 items-center gap-1.5">
+            <span class="truncate text-xs text-slate-400">{{ offerCode }}</span>
+            <span class="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold leading-none" :class="cabinToneClass">
+              {{ cabinLabel }}
+            </span>
+          </div>
+        </div>
+
+        <span
+          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-slate-400 transition-all duration-200 md:hidden"
+          :class="expanded ? 'rotate-180 border-[#2f9f92] text-[#2f9f92]' : 'border-slate-200'"
+        >
+          <ChevronDownIcon class="h-4 w-4" />
+        </span>
       </div>
 
+      <div class="flex flex-1 items-center gap-3 md:gap-4">
+        <div class="text-center">
+          <p class="text-xl font-bold tabular-nums leading-none whitespace-nowrap text-slate-900 md:text-2xl">{{ departInfo.time }}</p>
+          <p class="mt-0.5 text-xs text-slate-400">{{ departInfo.code }}</p>
+        </div>
 
-      <div class="min-w-0">
-        <p class="truncate text-[15px] font-semibold leading-snug text-slate-900">{{ offer.owner.name }}</p>
-        <div class="mt-0.5 flex min-w-0 items-center gap-1.5">
-          <span class="truncate text-xs text-slate-400">{{ offerCode }}</span>
-          <span class="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold leading-none" :class="cabinToneClass">
-            {{ cabinLabel }}
-          </span>
+        <div class="flex flex-1 flex-col gap-1.5 px-1">
+          <div class="flex items-center gap-1.5">
+            <span class="h-2 w-2 shrink-0 rounded-full bg-amber-400" />
+            <span class="h-px flex-1 border-t border-dashed border-slate-300" />
+            <PlaneIcon class="h-3.5 w-3.5 shrink-0 text-slate-400" />
+            <span class="h-px flex-1 border-t border-dashed border-slate-300" />
+            <span class="h-2 w-2 shrink-0 rounded-full bg-amber-400" />
+          </div>
+          <div class="flex items-center justify-between text-[11px] leading-none text-slate-400">
+            <span class="flex items-center gap-1">
+              <Clock3Icon class="h-3 w-3" />
+              {{ durationLabel }}
+            </span>
+            <span>{{ stopLabel }}</span>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <p class="text-xl font-bold tabular-nums leading-none whitespace-nowrap text-slate-900 md:text-2xl">{{ arriveInfo.time }}</p>
+          <p class="mt-0.5 text-xs text-slate-400">{{ arriveInfo.code }}</p>
         </div>
       </div>
 
-
-      <div class="text-center">
-        <p class="text-2xl font-bold tabular-nums leading-none whitespace-nowrap text-slate-900">{{ departInfo.time }}</p>
-        <p class="mt-0.5 text-xs text-slate-400">{{ departInfo.code }}</p>
-      </div>
-
-
-      <div class="flex flex-col gap-1.5 px-1">
-        <div class="flex items-center gap-1.5">
-          <span class="h-2 w-2 shrink-0 rounded-full bg-amber-400" />
-          <span class="h-px flex-1 border-t border-dashed border-slate-300" />
-          <PlaneIcon class="h-3.5 w-3.5 shrink-0 text-slate-400" />
-          <span class="h-px flex-1 border-t border-dashed border-slate-300" />
-          <span class="h-2 w-2 shrink-0 rounded-full bg-amber-400" />
+      <div class="flex items-center justify-between gap-3 border-t border-slate-100 pt-3 md:w-auto md:justify-end md:border-0 md:pt-0">
+        <div class="text-left md:text-right">
+          <div class="flex items-baseline gap-0.5">
+            <span class="text-[18px] font-bold leading-none text-slate-900">{{ perPassengerPriceLabel }}</span>
+            <span class="text-xs text-slate-500">/ pax</span>
+          </div>
+          <p v-if="comparePriceLabel" class="mt-0.5 text-xs text-slate-400 line-through">{{ comparePriceLabel }}</p>
+          <p v-else class="mt-0.5 text-xs text-slate-400">{{ totalPriceLabel }} total</p>
         </div>
-        <div class="flex items-center justify-between text-[11px] leading-none text-slate-400">
-          <span class="flex items-center gap-1">
-            <Clock3Icon class="h-3 w-3" />
-            {{ durationLabel }}
-          </span>
-          <span>{{ stopLabel }}</span>
-        </div>
+
+        <span
+          class="hidden h-9 w-9 shrink-0 items-center justify-center rounded-full border text-slate-400 transition-all duration-200 md:flex"
+          :class="expanded ? 'rotate-180 border-[#2f9f92] text-[#2f9f92]' : 'border-slate-200'"
+        >
+          <ChevronDownIcon class="h-4 w-4" />
+        </span>
       </div>
-
-
-      <div class="text-center">
-        <p class="text-2xl font-bold tabular-nums leading-none whitespace-nowrap text-slate-900">{{ arriveInfo.time }}</p>
-        <p class="mt-0.5 text-xs text-slate-400">{{ arriveInfo.code }}</p>
-      </div>
-
-
-      <div class="text-right">
-        <div class="flex items-baseline justify-end gap-0.5">
-          <span class="text-[18px] font-bold leading-none text-slate-900">{{ perPassengerPriceLabel }}</span>
-          <span class="text-xs text-slate-500">/ pax</span>
-        </div>
-        <p v-if="comparePriceLabel" class="mt-0.5 text-xs text-slate-400 line-through">{{ comparePriceLabel }}</p>
-        <p v-else class="mt-0.5 text-xs text-slate-400">{{ totalPriceLabel }} total</p>
-      </div>
-
-
-      <span
-        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-slate-400 transition-all duration-200"
-        :class="expanded ? 'rotate-180 border-[#2f9f92] text-[#2f9f92]' : 'border-slate-200'"
-      >
-        <ChevronDownIcon class="h-4 w-4" />
-      </span>
     </button>
 
-    <div v-if="expanded" class="border-t border-slate-100 bg-slate-50/60 px-4 py-4">
+    <div v-if="expanded" class="border-t border-slate-100 bg-slate-50/60 p-3 md:p-4">
       <div class="grid gap-3 lg:grid-cols-[1.6fr_1fr_1fr]">
 
 
-        <section class="rounded-xl border border-slate-200 bg-white p-4">
+        <section class="rounded-xl border border-slate-200 bg-white p-3 md:p-4">
           <div class="flex items-center gap-2">
             <PlaneIcon class="h-4 w-4 text-[#2f9f92]" />
             <h3 class="text-sm font-semibold text-slate-900">Your Journey</h3>
@@ -332,7 +337,7 @@ const addOnLabel = computed(() => {
         </section>
 
 
-        <section class="rounded-xl border border-slate-200 bg-white p-4">
+        <section class="rounded-xl border border-slate-200 bg-white p-3 md:p-4">
           <div class="flex items-center gap-2">
             <ShieldCheckIcon class="h-4 w-4 text-[#2f9f92]" />
             <h3 class="text-sm font-semibold text-slate-900">Flexibility</h3>
@@ -398,7 +403,7 @@ const addOnLabel = computed(() => {
         </section>
 
 
-        <section class="rounded-xl border border-slate-200 bg-white p-4">
+        <section class="rounded-xl border border-slate-200 bg-white p-3 md:p-4">
           <div class="flex items-center gap-2">
             <TagIcon class="h-4 w-4 text-[#2f9f92]" />
             <h3 class="text-sm font-semibold text-slate-900">Price & Extras</h3>
