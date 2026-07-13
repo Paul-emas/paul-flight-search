@@ -83,6 +83,9 @@ export interface PlaceSuggestion {
   iataCode: string
   name: string
   cityName: string | null
+  type: PlaceType
+  countryName: string | null
+  label: string
 }
 
 export interface ApiWarning {

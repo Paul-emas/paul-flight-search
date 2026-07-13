@@ -15,11 +15,25 @@ export function hasIataCode(place: Place): place is Place & { iata_code: string 
   return Boolean(place.iata_code)
 }
 
+const regionNames = new Intl.DisplayNames(['en'], { type: 'region' })
+
+function countryName(code: string): string | null {
+  if (!code) return null
+  try {
+    return regionNames.of(code.toUpperCase()) ?? code
+  } catch {
+    return code
+  }
+}
+
 export function toPlaceSuggestion(place: Place & { iata_code: string }): PlaceSuggestion {
   return {
     iataCode: place.iata_code,
     name: place.name,
     cityName: place.city_name,
+    type: place.type,
+    countryName: countryName(place.iata_country_code),
+    label: `${place.name} (${place.iata_code})`,
   }
 }
 

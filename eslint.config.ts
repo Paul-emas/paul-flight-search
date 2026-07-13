@@ -22,6 +22,15 @@ export default defineConfigWithVueTs(
   vueTsConfigs.recommended,
 
   {
+    name: 'app/ui-primitives',
+    files: ['src/components/ui/**/*.vue'],
+    rules: {
+      // ui-kit primitives are conventionally single-word (Input, Label, index)
+      'vue/multi-word-component-names': 'off',
+    },
+  },
+
+  {
     ...pluginVitest.configs.recommended,
     files: ['src/**/__tests__/*'],
   },

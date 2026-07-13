@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import { useFlightSearch } from '@/composables/useFlightSearch.ts';
+import { onMounted } from 'vue'
+import { useFlightSearch } from '@/composables/useFlightSearch.ts'
 // import { usePlaceSuggestions } from '@/composables/usePlaceSuggestions';
-import TheWelcome from '../components/TheWelcome.vue'
+import SearchForm from '@/components/modules/SearchForm.vue'
 
 const { search } = useFlightSearch()
 
@@ -25,7 +25,6 @@ onMounted(() => {
 
 <template>
   <main>
-
-    <TheWelcome />
+    <SearchForm />
   </main>
 </template>
